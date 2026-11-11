@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Grade Calculator | GradeBook</title>
+
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./assests/css/styles.css" />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      input,
+      select,
+      button {
+        font: inherit;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <!-- =========================================
+         TOP NAVIGATION
+    ========================================== -->
+    <header class="sticky top-0 z-30 border-b border-slate-200 bg-white">
+      <div
+        class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+      >
+        <!-- Brand -->
+        <a href="#" class="flex items-center gap-3">
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="21"
+              height="21"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path
+                d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+              />
+              <path d="M9 7h7" />
+              <path d="M9 11h7" />
+            </svg>
+          </div>
+
+          <div>
+            <h1 class="text-base font-extrabold tracking-tight text-slate-900">
+              GradeBook
+            </h1>
+            <p class="text-[11px] font-medium text-slate-500">
+              Student Performance Manager
+            </p>
+          </div>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="hidden items-center gap-7 md:flex">
+          <a href="#entry-panel" class="text-sm font-semibold text-emerald-700">
+            Grade Entry
+          </a>
+
+          <a
+            href="#results-panel"
+            class="text-sm font-medium text-slate-500 transition hover:text-emerald-700"
+          >
+            Grade Records
+          </a>
+
+          <a
+            href="#overview"
+            class="text-sm font-medium text-slate-500 transition hover:text-emerald-700"
+          >
+            Overview
+          </a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-3">
+          <div class="hidden text-right sm:block">
+            <p class="text-xs font-bold text-slate-800">Academic Workspace</p>
+            <p class="text-[11px] text-slate-500">Grade Management</p>
+          </div>
+
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-100 bg-emerald-50 text-sm font-extrabold text-emerald-700"
+          >
+            GB
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <!-- Page Heading -->
+      <section
+        class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
+      >
+        <div>
+          <div class="mb-3 flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            <p
+              class="text-xs font-bold uppercase tracking-[0.15em] text-emerald-700"
+            >
+              Academic Workspace
+            </p>
+          </div>
+
+          <h2
+            class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl"
+          >
+            Grade Calculator
+          </h2>
+
+          <p class="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+            Record student marks, calculate academic performance, and manage
+            grade records from one simple workspace.
+          </p>
+        </div>
+
+        <div
+          class="flex items-center gap-2 self-start rounded-lg border border-slate-200 bg-white px-4 py-2.5 sm:self-auto"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-emerald-600"
+          >
+            <path d="M12 3v18" />
+            <path d="M3 12h18" />
+          </svg>
+
+          <span class="text-xs font-semibold text-slate-600">
+            Mark range: 0–100
+          </span>
+        </div>
+      </section>
+
+      <!-- =========================================
+           GRADE ENTRY + PERFORMANCE OVERVIEW
+      ========================================== -->
+      <section class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <!-- GRADE ENTRY FORM -->
+        <div
+          id="entry-panel"
+          class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-5"
+        >
+          <!-- Card Heading -->
+          <div class="border-b border-slate-100 px-6 py-5">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                </svg>
+              </div>
+
+              <div>
+                <h3 class="text-base font-bold text-slate-900">
+                  Enter Student Grade
+                </h3>
+                <p class="mt-0.5 text-xs text-slate-500">
+                  Add a new subject mark
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="p-6">
+            <form action="#" method="post" id="grade-form" class="space-y-5">
+              <!-- Student Name -->
+              <div>
+                <label
+                  for="student-name"
+                  class="mb-2 block text-xs font-bold text-slate-700"
+                >
+                  Student Full Name
+                  <span class="text-rose-500">*</span>
+                </label>
+
+                <div class="relative">
+                  <div
+                    class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="10" cy="7" r="4" />
+                      <path d="M20 8v6" />
+                      <path d="M23 11h-6" />
+                    </svg>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="student-name"
+                    name="student-name"
+                    required
+                    autocomplete="name"
+                    placeholder="Enter student's full name"
+                    class="w-full rounded-lg border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-800 transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                  />
+                </div>
+              </div>
+
+              <!-- Subject and Mark -->
+              <div
+                class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"
+              >
+                <!-- Subject Name -->
+                <div>
+                  <label
+                    for="subject"
+                    class="mb-2 block text-xs font-bold text-slate-700"
+                  >
+                    Subject
+                    <span class="text-rose-500">*</span>
+                  </label>
+
+                  <div class="relative">
+                    <div
+                      class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="17"
+                        height="17"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path
+                          d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"
+                        />
+                      </svg>
+                    </div>
+                    <select
+                      id="subject-name"
+                      name="subject-name"
+                      required
+                      class="w-full rounded-lg border border-slate-200 bg-slate-50 py-3 pl-10 pr-3 text-sm text-slate-800 transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                    >
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="English">English</option>
+                      <option value="Biology">Biology</option>
+                      <option value="Chemistry">Chemistry</option>
+                      <option value="Physics">Physics</option>
+                      <option value="Geography">Geography</option>
+                      <option value="History">History</option>
+                      <option value="Christian Religious Education">
+                        Christian Religious Education
+                      </option>
+                      <option value="Islamic Religious Education">
+                        Islamic Religious Education
+                      </option>
+                      <option value="Agriculture">Agriculture</option>
+                      <option value="Computer Studies">Computer Studies</option>
+                      <option value="Information Technology">
+                        Information Technology
+                      </option>
+                      <option value="Business Studies">Business Studies</option>
+                      <option value="Economics">Economics</option>
+                      <option value="Entrepreneurship">Entrepreneurship</option>
+                      <option value="Kiswahili">Kiswahili</option>
+                      <option value="Luganda">Luganda</option>
+                      <option value="Literature in English">
+                        Literature in English
+                      </option>
+                      <option value="Fine Art">Fine Art</option>
+                      <option value="Physical Education">
+                        Physical Education
+                      </option>
+                      <option value="Home Economics">Home Economics</option>
+                      <option value="Technical Drawing">
+                        Technical Drawing
+                      </option>
+                      <option value="Woodwork">Woodwork</option>
+                      <option value="Metalwork">Metalwork</option>
+                      <option value="French">French</option>
+                      <option value="Music">Music</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Subject Mark -->
+                <div>
+                  <label
+                    for="subject-mark"
+                    class="mb-2 block text-xs font-bold text-slate-700"
+                  >
+                    Subject Mark
+                    <span class="text-rose-500">*</span>
+                  </label>
+
+                  <div class="relative">
+                    <input
+                      type="number"
+                      id="subject-mark"
+                      name="subject-mark"
+                      min="0"
+                      max="100"
+                      step="1"
+                      inputmode="decimal"
+                      required
+                      placeholder="Enter mark"
+                      class="w-full rounded-lg border border-slate-200 bg-slate-50 py-3 pl-4 pr-14 text-sm text-slate-800 transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                    />
+
+                    <span
+                      class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-xs font-bold text-slate-400"
+                    >
+                      / 100
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mark Information -->
+              <div
+                class="flex items-start gap-2.5 rounded-lg border border-blue-100 bg-blue-50 p-3.5"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mt-0.5 shrink-0 text-blue-600"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4" />
+                  <path d="M12 8h.01" />
+                </svg>
+
+                <p class="text-[11px] leading-5 text-blue-800">
+                  Enter a valid score between 0 and 100. The student's grade and
+                  performance summary will be calculated when the entry is
+                  processed.
+                </p>
+              </div>
+
+              <!-- Form Feedback: Connect with JavaScript -->
+              <div
+                id="form-feedback"
+                role="status"
+                aria-live="polite"
+                class="hidden text-sm"
+              ></div>
+
+              <!-- Form Actions -->
+              <div class="flex flex-col gap-3 pt-1 sm:flex-row">
+                <button
+                  type="submit"
+                  id="submit-grade"
+                  name="submit"
+                  class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 5v14" />
+                    <path d="M5 12h14" />
+                  </svg>
+
+                  Add Grade
+                </button>
+
+                <button
+                  type="reset"
+                  class="rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
+                >
+                  Clear Form
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- PERFORMANCE OVERVIEW -->
+        <div id="overview" class="flex flex-col gap-5 lg:col-span-7">
+          <!-- Overview Heading -->
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">
+                Performance Overview
+              </h3>
+              <p class="mt-1 text-xs text-slate-500">
+                Your academic performance at a glance
+              </p>
+            </div>
+
+            <span
+              class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500"
+            >
+              Overview
+            </span>
+          </div>
+
+          <!-- Statistics Cards -->
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <!-- Total Records -->
+            <div
+              class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-xs font-semibold text-slate-500">
+                    Total Grade Records
+                  </p>
+
+                  <h4
+                    id="total-records"
+                    class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900"
+                  >
+                    —
+                  </h4>
+
+                  <p class="mt-2 text-[11px] text-slate-400">
+                    Recorded subject marks
+                  </p>
+                </div>
+
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M8 6h13" />
+                    <path d="M8 12h13" />
+                    <path d="M8 18h13" />
+                    <path d="M3 6h.01" />
+                    <path d="M3 12h.01" />
+                    <path d="M3 18h.01" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Class Average -->
+            <div
+              class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-xs font-semibold text-slate-500">
+                    Overall Average
+                  </p>
+
+                  <h4
+                    id="class-average"
+                    class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900"
+                  >
+                    —
+                  </h4>
+
+                  <p class="mt-2 text-[11px] text-slate-400">
+                    Average performance score
+                  </p>
+                </div>
+
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 3v18h18" />
+                    <path d="m19 9-5 5-4-4-5 5" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Highest Mark -->
+            <div
+              class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-xs font-semibold text-slate-500">
+                    Highest Mark
+                  </p>
+
+                  <h4
+                    id="highest-mark"
+                    class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900"
+                  >
+                    —
+                  </h4>
+
+                  <p class="mt-2 text-[11px] text-slate-400">
+                    Best recorded subject score
+                  </p>
+                </div>
+
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m8 21 4-4 4 4" />
+                    <path d="M12 17V3" />
+                    <path d="m5 10 7 7 7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top Grade -->
+            <div
+              class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            >
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="text-xs font-semibold text-slate-500">
+                    Highest Grade
+                  </p>
+
+                  <h4
+                    id="top-grade"
+                    class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900"
+                  >
+                    —
+                  </h4>
+
+                  <p class="mt-2 text-[11px] text-slate-400">
+                    Highest achieved grade
+                  </p>
+                </div>
+
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50 text-purple-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Guide -->
+          <div
+            class="flex flex-1 flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+          >
+            <div>
+              <div class="mb-4 flex items-center gap-2">
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4" />
+                    <path d="M12 8h.01" />
+                  </svg>
+                </div>
+
+                <h4 class="text-sm font-bold text-slate-800">
+                  Getting Started
+                </h4>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <span
+                    class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-700"
+                  >
+                    1
+                  </span>
+                  <p class="text-xs text-slate-600">
+                    Enter the student's full name.
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <span
+                    class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-700"
+                  >
+                    2
+                  </span>
+                  <p class="text-xs text-slate-600">
+                    Enter the subject and the student's mark.
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <span
+                    class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-700"
+                  >
+                    3
+                  </span>
+                  <p class="text-xs text-slate-600">
+                    Submit the entry to calculate and record the grade.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p
+              class="mt-5 border-t border-slate-100 pt-4 text-[11px] leading-5 text-slate-400"
+            >
+              Your performance statistics will update as grade records are
+              added.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           LATEST GRADE RESULTS
+      ========================================== -->
+      <section
+        id="result"
+        class="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+      >
+        <!-- Results Header -->
+        <div
+          class="flex flex-col justify-between gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:px-6"
+        >
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="results-panel" class="text-base font-bold text-slate-900">
+                Latest Grade Results
+              </h3>
+
+              <span
+                class="rounded-md bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-700"
+              >
+                RECORDS
+              </span>
+            </div>
+
+            <p class="mt-1.5 text-xs text-slate-500">
+              View and manage student academic performance records.
+            </p>
+          </div>
+
+          <!-- Table Tools -->
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <!-- Search -->
+            <div class="relative">
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </div>
+
+              <input
+                type="search"
+                id="search-grades"
+                placeholder="Search records..."
+                class="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-xs text-slate-700 placeholder:text-slate-400 transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 sm:w-96"
+              />
+            </div>
+
+            <!-- Grade Filter -->
+            <select
+              id="grade-filter"
+              aria-label="Filter by grade"
+              class="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-600 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+            >
+              <option value="">All Grades</option>
+              <option value="A">Grade A</option>
+              <option value="B">Grade B</option>
+              <option value="C">Grade C</option>
+              <option value="D">Grade D</option>
+              <option value="F">Grade F</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="custom-scrollbar w-full overflow-x-auto">
+          <table class="w-full min-w-[950px] border-collapse text-left">
+            <thead>
+              <tr class="border-b border-slate-100 bg-slate-50">
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  #
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Student Name
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Subject
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Mark
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Total
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Average
+                </th>
+
+                <th
+                  class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Grade
+                </th>
+
+                <th
+                  class="px-5 py-4 text-center text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+
+            <!--
+              JavaScript integration:
+              Add generated grade rows inside this tbody.
+            -->
+            <tbody id="student-results" class="divide-y divide-slate-100">
+              <!-- Initial Empty State -->
+              <tr>
+                <td colspan="8" class="px-5 py-16 text-center">
+                  <div class="mx-auto flex max-w-sm flex-col items-center">
+                    <div
+                      class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="26"
+                        height="26"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M8 6h13" />
+                        <path d="M8 12h13" />
+                        <path d="M8 18h13" />
+                        <path d="M3 6h.01" />
+                        <path d="M3 12h.01" />
+                        <path d="M3 18h.01" />
+                      </svg>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-slate-800">
+                      No Grade Records Yet
+                    </h4>
+
+                    <p class="mt-2 text-xs leading-5 text-slate-400">
+                      Your student grade records will appear here after you
+                      submit your first entry.
+                    </p>
+
+                    <a
+                      href="#entry-panel"
+                      class="mt-5 inline-flex items-center gap-2 rounded-lg bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100"
+                    >
+                      Add Your First Grade
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M7 17 17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer -->
+        <div
+          class="flex flex-col justify-between gap-3 border-t border-slate-100 bg-white px-5 py-4 sm:flex-row sm:items-center"
+        >
+          <p class="text-xs text-slate-400">
+            Showing
+            <span id="showing-records" class="font-bold text-slate-700">0</span>
+            grade records
+          </p>
+
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            Grade records overview
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================
+           FOOTER
+      ========================================== -->
+      <footer class="mt-10 border-t border-slate-200 py-6">
+        <div
+          class="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left"
+        >
+          <div>
+            <p class="text-xs font-semibold text-slate-600">
+              GradeBook — Student Performance Manager
+            </p>
+
+            <p class="mt-1 text-[11px] text-slate-400">
+              A simple workspace for calculating and managing student grades.
+            </p>
+          </div>
+
+          <div>
+            <p class="text-[11px] text-slate-400">
+              Copyright &copy; 2026. All rights reserved.
+            </p>
+
+            <p class="mt-1 text-[11px] text-slate-500">
+              Developed By:
+              <span class="font-bold text-emerald-700">
+                Kisakye Paul – Software Developer
+              </span>
+            </p>
+
+            <a
+              href="tel:+256774185964"
+              class="mt-1 inline-block text-[11px] font-bold text-emerald-700 hover:text-emerald-800"
+            >
+              +256 774 185 964
+            </a>
+          </div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="./assests/js/script.js"></script>
+  </body>
+</html>
