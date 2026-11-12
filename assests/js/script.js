@@ -4,14 +4,15 @@ const initGradeApp = () => {
   const subjectName = document.querySelector('#subject-name')
   const subjectMark = document.querySelector('#subject-mark')
   let errMsg = document.querySelector('#err-msg')
-  let count = 1
-  const availableResults = getStoreResults()
-  console.log(availableResults)
   // errMsg.textContent = ''
+  // available data in the app
+  getAllRecords()
+  performanceOverview()
 
   form.addEventListener('submit', e => {
     e.preventDefault()
     console.log('process data')
+    const availableResults = getStoreResults()
 
     const userData = processUserData(form)
     console.log(userData)
@@ -37,27 +38,33 @@ const initGradeApp = () => {
     ) {
       showErrMsg('Enter full names', studentName)
     }
-    console.log(studentData)
-    // store to local storage
-    storeResults(studentData, availableResults)
-    const studentData = displayResult(userData, count)
-
-    // clearError(errMsg)
+    const allRecords = [...availableResults, userData]
+    // /store all records
+    storeResults(allRecords)
+    getAllRecords()
+    performanceOverview()
   })
+}
+const getAllRecords = () => {
+  const availableResults = getStoreResults()
+  const studentList = document.querySelector('#student-results')
+  studentList.replaceChildren(' ')
+  if (availableResults.length > 0) {
+    availableResults.map((item, i) => displayResult(item, i + 1))
+  } else {
+    console.log('No data is available!')
+  }
+  restForm()
 }
 const displayResult = (data, count) => {
   const studentList = document.querySelector('#student-results')
-  const availableResults = getStoreResults()
-  const usercounter =
-    availableResults.length > 0 ? availableResults.length + 1 : count
   if (!studentList) {
     console.log('Result section not found')
     return
   }
   const row = document.createElement('tr')
 
-  const counter = String(usercounter)
-  console.log(availableResults)
+  const counter = String(count)
   let id = counter < 10 ? counter.padStart(2, '0') : counter // user uniqueid
   const studentId = document.createElement('td')
   studentId.textContent = id
@@ -75,9 +82,26 @@ const displayResult = (data, count) => {
   averageElement.textContent = data.subjectMark
   const gradeElement = document.createElement('td')
   gradeElement.textContent = calculateMarks(data.subjectMark)
+  // Edit btn
+  const editBtnTd = document.createElement('td')
+  const editBtn = document.createElement('button')
+  editBtn.textContent = 'Edit'
+  editBtn.id = count
+  editBtn.className =
+    'editBtn p-2 text-slate-100 rounded bg-blue-400 text-sm hover:bg-blue-700 '
+  editBtnTd.appendChild(editBtn)
+  // Delete btn
+  const deleteBtnTd = document.createElement('td')
+  const deleteBtn = document.createElement('button')
+  deleteBtn.textContent = 'Delete'
+  deleteBtn.id = count
+  deleteBtn.className =
+    'deleteBtn p-2 rounded text-slate-100 bg-red-400 text-sm hover:bg-red-700 ms-2'
+  editBtnTd.appendChild(deleteBtn)
+
   //append data here
 
-  row.append(totalElement, averageElement, gradeElement)
+  row.append(totalElement, averageElement, gradeElement, editBtnTd)
   studentList.append(row)
   console.log(row)
 
@@ -87,6 +111,41 @@ const displayResult = (data, count) => {
     subject: data.subjectName,
     mark: data.subjectMark
   }
+}
+const performanceOverview = () => {
+  const totalRecords = document.querySelector('#total-records')
+  const classAverage = document.querySelector('#class-average')
+  const highestMark = document.querySelector('#highest-mark')
+  const topGrade = document.querySelector('#top-grade')
+  const showingRecords = document.querySelector('#showing-records')
+  const studentRecords = getStoreResults()
+  const getTotalRecords = studentRecords.length
+  // Filter marks
+  const filteredMark = studentRecords.filter(
+    item =>
+      item.subjectMark !== 0 && item.subjectMark > 0 && item.subjectMark <= 100
+  )
+  console.log(filteredMark)
+  const filteredMarkTotal = filteredMark.reduce(
+    (total, item) => total + Number(item.subjectMark),
+    0
+  )
+  // Calculate class average
+  const getClassAverage =
+    filteredMark.length > 0 ? filteredMarkTotal / filteredMark.length : 0
+  const maxMark = [...filteredMark].sort(
+    (a, b) => Number(b.subjectMark) - Number(a.subjectMark)
+  )
+  // Calculate the highest mark
+  const getHigestMark = maxMark[0].subjectMark
+  const getHighestGradeAchieved = calculateMarks(getHigestMark)
+
+  // Show students performance
+  totalRecords.textContent = getTotalRecords ?? '__'
+  classAverage.textContent = getClassAverage.toFixed(2) ?? '__'
+  highestMark.textContent = getHigestMark ?? '__'
+  topGrade.textContent = getHighestGradeAchieved ?? '__'
+  showingRecords.textContent = getTotalRecords ?? 0
 }
 const calculateMarks = mark => {
   let grade = Number(mark)
@@ -112,12 +171,8 @@ const calculateMarks = mark => {
   }
   return grade
 }
-const storeResults = (data, availableResults) => {
-  const newRecords = {
-    data,
-    ...availableResults
-  }
-  localStorage.setItem('marks', JSON.stringify(newRecords))
+const storeResults = data => {
+  localStorage.setItem('marks', JSON.stringify(data))
 }
 const getStoreResults = () => {
   const results = JSON.parse(localStorage.getItem('marks') ?? '[]')
@@ -132,8 +187,11 @@ const clearError = target => {
   target.textContent = ''
   target.classList.add('hidden')
 }
-const restForm = target => {
-  target.reset()
+const restForm = () => {
+  const form = document.querySelector('#grade-form')
+  const studentName = document.querySelector('#student-name')
+  form.reset()
+  studentName.focus()
 }
 
 // Process user form details

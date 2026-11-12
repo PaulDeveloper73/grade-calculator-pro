@@ -12,7 +12,3 @@
   background-color: hsla(161, 93%, 30%, 0.219);
   cursor: pointer;
 }
-#student-results tr :hover {
-  background-color: #ffffffe7;
-  border-block: 1px solid hsla(161, 93%, 30%, 0.219);
-}
