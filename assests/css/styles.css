@@ -1,0 +1,18 @@
+#student-results tr td {
+  padding: 10px 20px;
+  font-weight: 500;
+}
+#student-results tr:nth-child(even) {
+  background-color: hsla(161, 92%, 10%, 0.171);
+}
+#student-results tr:nth-child(odd) {
+  background-color: hsla(161, 93%, 30%, 0.007);
+}
+#student-results tr:hover {
+  background-color: hsla(161, 93%, 30%, 0.219);
+  cursor: pointer;
+}
+#student-results tr :hover {
+  background-color: #ffffffe7;
+  border-block: 1px solid hsla(161, 93%, 30%, 0.219);
+}

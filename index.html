@@ -230,7 +230,13 @@
           </div>
 
           <!-- Form -->
-          <div class="p-6">
+          <div class="p-6 relative">
+            <p
+              id="err-msg"
+              class="p-4 shadow-md bg-red-50 text-sm text-red-600 absolute -top-8 right-4 animate-bounce hidden"
+            >
+              Number is less than zero!
+            </p>
             <form action="#" method="post" id="grade-form" class="space-y-5">
               <!-- Student Name -->
               <div>
@@ -270,6 +276,7 @@
                     name="student-name"
                     required
                     autocomplete="name"
+                    maxlength="100"
                     placeholder="Enter student's full name"
                     class="w-full rounded-lg border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm text-slate-800 transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
                   />
@@ -823,7 +830,10 @@
         <div class="custom-scrollbar w-full overflow-x-auto">
           <table class="w-full min-w-[950px] border-collapse text-left">
             <thead>
-              <tr class="border-b border-slate-100 bg-slate-50">
+              <tr
+                class="border-b border-green-100 bg-emerald-600 *:text-[16px] *:text-white"
+                sty
+              >
                 <th
                   class="px-5 py-4 text-[10px] font-extrabold uppercase tracking-wider text-slate-500"
                 >
@@ -880,7 +890,8 @@
             -->
             <tbody id="student-results" class="divide-y divide-slate-100">
               <!-- Initial Empty State -->
-              <tr>
+
+              <!-- <tr>
                 <td colspan="8" class="px-5 py-16 text-center">
                   <div class="mx-auto flex max-w-sm flex-col items-center">
                     <div
@@ -938,7 +949,7 @@
                     </a>
                   </div>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </div>
