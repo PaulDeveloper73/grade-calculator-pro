@@ -137,8 +137,9 @@ const performanceOverview = () => {
     (a, b) => Number(b.subjectMark) - Number(a.subjectMark)
   )
   // Calculate the highest mark
-  const getHigestMark = maxMark[0].subjectMark
-  const getHighestGradeAchieved = calculateMarks(getHigestMark)
+  const getHigestMark = maxMark.length > 0 ? maxMark[0].subjectMark : 0
+  const getHighestGradeAchieved =
+    maxMark.length > 0 ? calculateMarks(getHigestMark) : 0
 
   // Show students performance
   totalRecords.textContent = getTotalRecords ?? '__'
