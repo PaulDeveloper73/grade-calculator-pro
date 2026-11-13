@@ -43,6 +43,7 @@ const initGradeApp = () => {
     storeResults(allRecords)
     getAllRecords()
     performanceOverview()
+    showSucessMsg(errMsg)
   })
 }
 const getAllRecords = () => {
@@ -56,6 +57,17 @@ const getAllRecords = () => {
   }
   restForm()
 }
+const showSucessMsg = target => {
+  target.classList.remove('hidden', 'bg-red-50', 'text-red-600')
+  target.classList.add('bg-green-50', 'text-green-600')
+  target.textContent = 'New Records Added Successfully!'
+  setTimeout(() => {
+    target.classList.add('hidden', 'bg-red-50', 'text-red-600')
+    target.classList.remove('bg-green-50', 'text-green-600')
+    target.textContent = ''
+  }, 5000)
+}
+
 const displayResult = (data, count) => {
   const studentList = document.querySelector('#student-results')
   if (!studentList) {
