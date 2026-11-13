@@ -5,6 +5,7 @@ const initGradeApp = () => {
   const subjectMark = document.querySelector('#subject-mark')
   let errMsg = document.querySelector('#err-msg')
   const formStatus = document.querySelector('#form-status')
+  const resetAllForm = document.querySelector('#reset-form')
 
   // errMsg.textContent = ''
   // available data in the app
@@ -12,6 +13,11 @@ const initGradeApp = () => {
   performanceOverview()
   editStudentdetails()
   deleteStudentdetails()
+
+  resetAllForm.addEventListener('click', e => {
+    e.preventDefault()
+    restForm()
+  })
 
   form.addEventListener('submit', e => {
     e.preventDefault()
@@ -88,7 +94,8 @@ const showDeleteMsg = (target, msg) => {
   }, 5000)
 }
 const updatingStudentDetails = (availableRecords, data) => {
-  let errMsg = document.querySelector('#err-msg')
+  const errMsg = document.querySelector('#err-msg')
+  const submitGradeBtn = document.querySelector('#submit-grade')
 
   const UpdatedData = [...availableRecords].map(user => {
     if (user.id == data.id) {
@@ -102,6 +109,7 @@ const updatingStudentDetails = (availableRecords, data) => {
     }
   })
   storeResults(UpdatedData)
+  submitGradeBtn.textContent = 'Add'
   getAllRecords()
   performanceOverview()
   showSucessMsg(errMsg, 'Record Updated Successfully!')
