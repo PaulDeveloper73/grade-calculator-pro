@@ -4,10 +4,14 @@ const initGradeApp = () => {
   const subjectName = document.querySelector('#subject-name')
   const subjectMark = document.querySelector('#subject-mark')
   let errMsg = document.querySelector('#err-msg')
+  const formStatus = document.querySelector('#form-status')
+
   // errMsg.textContent = ''
   // available data in the app
   getAllRecords()
   performanceOverview()
+  editStudentdetails()
+  deleteStudentdetails()
 
   form.addEventListener('submit', e => {
     e.preventDefault()
@@ -16,6 +20,11 @@ const initGradeApp = () => {
 
     const userData = processUserData(form)
     console.log(userData)
+    // Updating data
+    if (formStatus.value === 'update') {
+      updatingStudentDetails(availableResults, userData)
+      return
+    }
     // validate userdata
     if (
       userData.subjectMark < 0 ||
@@ -43,7 +52,8 @@ const initGradeApp = () => {
     storeResults(allRecords)
     getAllRecords()
     performanceOverview()
-    showSucessMsg(errMsg)
+    showSucessMsg(errMsg, 'New Records Added Successfully!')
+    restForm()
   })
 }
 const getAllRecords = () => {
@@ -55,19 +65,48 @@ const getAllRecords = () => {
   } else {
     console.log('No data is available!')
   }
-  restForm()
+  // restForm()
 }
-const showSucessMsg = target => {
+const showSucessMsg = (target, msg) => {
   target.classList.remove('hidden', 'bg-red-50', 'text-red-600')
   target.classList.add('bg-green-50', 'text-green-600')
-  target.textContent = 'New Records Added Successfully!'
+  target.textContent = msg
   setTimeout(() => {
     target.classList.add('hidden', 'bg-red-50', 'text-red-600')
     target.classList.remove('bg-green-50', 'text-green-600')
     target.textContent = ''
   }, 5000)
 }
+const showDeleteMsg = (target, msg) => {
+  target.classList.add('bg-red-50', 'text-red-600')
+  target.classList.remove('hidden', 'bg-green-50', 'text-green-600')
+  target.textContent = msg
+  setTimeout(() => {
+    target.classList.remove('bg-red-50', 'text-red-600')
+    target.classList.add('hidden', 'bg-green-50', 'text-green-600')
+    target.textContent = ''
+  }, 5000)
+}
+const updatingStudentDetails = (availableRecords, data) => {
+  let errMsg = document.querySelector('#err-msg')
 
+  const UpdatedData = [...availableRecords].map(user => {
+    if (user.id == data.id) {
+      console.log(user.id)
+      return {
+        ...user,
+        ...data
+      }
+    } else {
+      return user
+    }
+  })
+  storeResults(UpdatedData)
+  getAllRecords()
+  performanceOverview()
+  showSucessMsg(errMsg, 'Record Updated Successfully!')
+  restForm()
+}
 const displayResult = (data, count) => {
   const studentList = document.querySelector('#student-results')
   if (!studentList) {
@@ -82,6 +121,9 @@ const displayResult = (data, count) => {
   studentId.textContent = id
   row.appendChild(studentId)
   for (const key in data) {
+    if (key === 'id' || key == 'formStatus') {
+      continue
+    }
     const td = document.createElement('td')
     td.textContent = data[key]
     row.appendChild(td)
@@ -98,7 +140,7 @@ const displayResult = (data, count) => {
   const editBtnTd = document.createElement('td')
   const editBtn = document.createElement('button')
   editBtn.textContent = 'Edit'
-  editBtn.id = count
+  editBtn.id = data.id
   editBtn.className =
     'editBtn p-2 text-slate-100 rounded bg-blue-400 text-sm hover:bg-blue-700 '
   editBtnTd.appendChild(editBtn)
@@ -106,7 +148,7 @@ const displayResult = (data, count) => {
   const deleteBtnTd = document.createElement('td')
   const deleteBtn = document.createElement('button')
   deleteBtn.textContent = 'Delete'
-  deleteBtn.id = count
+  deleteBtn.id = data.id
   deleteBtn.className =
     'deleteBtn p-2 rounded text-slate-100 bg-red-400 text-sm hover:bg-red-700 ms-2'
   editBtnTd.appendChild(deleteBtn)
@@ -124,6 +166,65 @@ const displayResult = (data, count) => {
     mark: data.subjectMark
   }
 }
+
+// Process student record editting
+const editStudentdetails = () => {
+  const studentList = document.querySelector('#student-results')
+
+  studentList.addEventListener('click', e => {
+    const target = e.target.closest('.editBtn')
+    if (!target) {
+      return
+    }
+    const studentName = document.querySelector('#student-name')
+    const subjectName = document.querySelector('#subject-name')
+    const subjectMark = document.querySelector('#subject-mark')
+    const submitGradeBtn = document.querySelector('#submit-grade')
+    const formStatus = document.querySelector('#form-status')
+    const stuId = document.querySelector('#stu-id')
+    studentName.focus()
+    const allAvailableRecords = getStoreResults()
+    const filteredList = [...allAvailableRecords].filter(
+      user => user.id == target.id
+    )
+    submitGradeBtn.textContent = 'Update Record'
+    formStatus.value = 'update'
+    console.log(filteredList)
+    filteredList?.map(user => {
+      stuId.value = user.id
+      studentName.value = user.studentName
+      subjectName.value = user.subjectName
+      subjectMark.value = user.subjectMark
+    })
+
+    console.log(target.id)
+    getAllRecords()
+    performanceOverview()
+  })
+}
+const deleteStudentdetails = () => {
+  const studentList = document.querySelector('#student-results')
+  let errMsg = document.querySelector('#err-msg')
+
+  studentList.addEventListener('click', e => {
+    const allAvailableRecords = getStoreResults()
+    const target = e.target.closest('.deleteBtn')
+    if (!target) {
+      return
+    }
+
+    const filteredList = [...allAvailableRecords].filter(
+      user => user.id != target?.id
+    )
+    storeResults(filteredList)
+    getAllRecords()
+    performanceOverview()
+    restForm()
+    showDeleteMsg(errMsg, 'Record deleted Successfully!')
+  })
+}
+
+// process student record deleting
 const performanceOverview = () => {
   const totalRecords = document.querySelector('#total-records')
   const classAverage = document.querySelector('#class-average')
@@ -213,11 +314,21 @@ const processUserData = form => {
   const studentName = data.get('student-name').trim()
   const subjectName = data.get('subject-name').trim()
   const subjectMark = Number(data.get('subject-mark').trim())
+  const formStatus = data.get('form-status').trim()
+  const stuId = data.get('stu-id').trim()
+  // Process id
+  const allStudentRecords = getStoreResults()
+  let id = allStudentRecords.length > 0 ? allStudentRecords.length + 1 : 1
+  if (String(formStatus) === 'update') {
+    id = stuId
+  }
 
   return {
+    id,
     studentName,
     subjectName,
-    subjectMark
+    subjectMark,
+    formStatus
   }
 }
 
